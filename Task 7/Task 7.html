@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;500;600&display=swap');
+
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #f5f5f5;
+            --header-background: #ffffff;
+            --border-color: #ddd;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --transition: 0.3s ease;
+        }
+
+        html, body {
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--secondary-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--header-background);
+            color: var(--secondary-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+        }
+
+        .navbar .logo img {
+            width: 40px;
+            height: auto;
+            margin-right: 1rem;
+        }
+
+        .navbar .logo h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .nav-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin: 0 1rem;
+            transition: color var(--transition);
+            position: relative;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .navbar .nav-links a::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width var(--transition);
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+        }
+
+        .navbar .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .navbar .menu-toggle {
+            display: none;
+            cursor: pointer;
+        }
+
+        .navbar .menu-toggle .bar {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background-color: var(--secondary-color);
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: url('Header Backdrop.jpg') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: var(--header-background);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section p {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--background-color);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            text-align: center;
+        }
+
+        .search_box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .search_box input {
+            width: 70%;
+            padding: 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            font-size: 1.2rem;
+            outline: none;
+            transition: border-color var(--transition);
+            box-sizing: border-box;
+        }
+
+        .search_box input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .search_box button {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 4rem;
+            height: 4rem;
+            margin-left: 1rem;
+            cursor: pointer;
+            font-size: 1.6rem;
+            transition: background var(--transition);
+        }
+
+        .search_box button:hover {
+            background: #2980b9;
+        }
+
+        #show {
+            display: none; /* Hide by default */
+            margin-top: 2rem;
+            background-color: #5db2cc;
+            color: #000000;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        #show img {
+            width: 80px;
+            margin-top: 1rem;
+        }
+
+        .footer {
+            background: var(--header-background);
+            color: var(--secondary-color);
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            background-color: black;
+            color: white;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .social-icons img {
+            width: 24px;
+            height: 24px;
+            margin: 0 0.5rem;
+            vertical-align: middle;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: var(--header-background);
+                position: absolute;
+                top: 60px;
+                left: 0;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+            }
+
+            .navbar .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="logo.jpg" alt="Logo">
+            <h1>Weather App</h1>
+        </div>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact Us</a>
+        </div>
+    </div>
+
+    <header class="header" id="home">
+        <h1>Check Weather Of Any Location !</h1>
+        <div class="container">
+            <div class="search_box">
+                <input type="text" placeholder="Enter a Location name :- " id="city" autocomplete="off" />
+                <button id="search"><i class="fas fa-search"></i></button>
+            </div>
+            <div id="show"></div>
+        </div>
+    </header>
+
+    <section class="section" id="about">
+        <h2>About Us</h2>
+        <img src="About Us.png" alt="About Us Image">
+        <p>
+            Welcome to our Weather App! Our mission is to provide you with reliable and up-to-date weather information to make your life easier. With our app, you can check the weather conditions for any location worldwide. We are committed to delivering accurate forecasts and helping you plan your day effectively.
+        </p>
+    </section>
+
+    <section class="section" id="contact">
+        <h2>Contact Us</h2>
+        <img src="contact us.avif" alt="Contact Us Image">
+        <p>
+            Have questions or feedback? Feel free to reach out to us at:
+        </p>
+        <p>
+            Email: <a href="mailto:info@example.com">info@example.com</a>
+        </p>
+        <p>
+            Follow us on social media:
+        </p>
+        <div class="social-icons">
+            <a href="https://facebook.com"><img src="facebook.webp" alt="Facebook"></a>
+            <a href="https://twitter.com"><img src="twitter.webp" alt="Twitter"></a>
+            <a href="https://instagram.com"><img src="insta.jpg" alt="Instagram"></a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 Weather App. All rights reserved.</p>
+        <p>Made By Viraj Tupe</p>
+    </footer>
+
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        document.getElementById('search').addEventListener('click', function() {
+            const city = document.getElementById('city').value;
+            const apiKey = 'a3f3dda8f2e664204b1fecbeba0f3d7d';
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            document.getElementById('show').style.display = 'none';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === 200) {
+                        const weather = data.weather[0].description;
+                        const temp = data.main.temp;
+                        const humidity = data.main.humidity;
+                        const windSpeed = data.wind.speed;
+                        const visibility = data.visibility / 1000; 
+                        const icon = `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
+
+                        
+                        document.getElementById('show').innerHTML = `
+                            <h3>Weather in ${city}</h3>
+                            <img src="${icon}" alt="${weather}">
+                            <p><span class="weather-attribute">Description:</span> ${weather}</p>
+                            <p><span class="weather-attribute">Temperature:</span> ${temp}°C</p>
+                            <p><span class="weather-attribute">Humidity:</span> ${humidity}%</p>
+                            <p><span class="weather-attribute">Wind Speed:</span> ${windSpeed} m/s</p>
+                            <p><span class="weather-attribute">Visibility:</span> ${visibility} km</p>
+                        `;
+
+                    
+                        document.getElementById('show').style.display = 'block';
+                    } else {
+                        document.getElementById('show').innerHTML = `<p>City not found.</p>`;
+
+                       
+                        document.getElementById('show').style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('show').innerHTML = `<p>Something went wrong.</p>`;
+
+                    document.getElementById('show').style.display = 'block';
+                });
+        });
+
+        document.getElementById('city').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                document.getElementById('search').click(); 
+            }
+        });
+    </script>
+</body>
+
+</html>
