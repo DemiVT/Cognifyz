@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Server-Side Functionality</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+    <script>
+        async function fetchCacheData() {
+            const response = await fetch('/cache');
+            const data = await response.text();
+            document.getElementById('cache-data').textContent = data;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Advanced Server-Side Functionality</h1>
+        <button onclick="fetchCacheData()">Fetch Cached Data</button>
+        <pre id="cache-data"></pre>
+    </div>
+</body>
+</html>
