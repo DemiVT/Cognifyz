@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complex Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .form-container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+    <script>
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            const error = document.getElementById('password-error');
+            if (password.length < 6) {
+                error.textContent = 'Password must be at least 6 characters long.';
+                return false;
+            }
+            error.textContent = '';
+            return true;
+        }
+
+        function dynamicUpdate() {
+            const name = document.getElementById('name').value;
+            document.getElementById('greeting').textContent = `Hello, ${name}!`;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1 class="text-center">Complex Form</h1>
+            <form onsubmit="return validatePassword()">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" oninput="dynamicUpdate()" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                    <span id="password-error" class="error"></span>
+                </div>
+                <div id="greeting"></div>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
