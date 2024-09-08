@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Integration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+    <script>
+        async function fetchItems() {
+            const response = await fetch('/api/items');
+            const items = await response.json();
+            const list = document.getElementById('item-list');
+            list.innerHTML = '';
+            items.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item.name;
+                list.appendChild(listItem);
+            });
+        }
+
+        async function addItem() {
+            const name = document.getElementById('item-name').value;
+            const response = await fetch('/api/items', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+            if (response.ok) {
+                fetchItems();
+            }
+        }
+
+        window.onload = fetchItems;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">API Integration</h1>
+        <input type="text" id="item-name" placeholder="New item">
+        <button onclick="addItem()">Add Item</button>
+        <ul id="item-list"></ul>
+    </div>
+</body>
+</html>
